@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HemoScan — Sistem Deteksi Risiko Anemia</title>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+    <div class="layout">
+        
+        <aside class="panel-left">
+            <div class="brand">
+                <div class="brand-icon">🩸</div>
+                <div>
+                    <div class="brand-name">HemoScan</div>
+                    <div class="brand-ver">Sistem Fuzzy v1.0</div>
+                </div>
+            </div>
+            <div class="panel-title">Deteksi<br><em>Risiko</em><br>Anemia</div>
+            <p class="panel-desc">
+            Sistem ini menggunakan metode logika fuzzy Mamdani untuk menilai tingkat risiko anemia berdasarkan kadar hemoglobin, gejala klinis, dan durasi keluhan.
+            </p>
+            <div class="alert-box">
+                <strong>⚠ Perhatian Medis</strong>
+                Hasil analisis ini bersifat indikatif dan tidak menggantikan diagnosis dokter. Selalu konsultasikan kondisi Anda ke tenaga medis profesional.
+            </div>
+            <div class="panel-stats">
+                <div class="pstat"><div class="pstat-num">3</div><div class="pstat-label">Variabel Input</div></div>
+                <div class="pstat"><div class="pstat-num">16</div><div class="pstat-label">Aturan Fuzzy</div></div>
+                <div class="pstat"><div class="pstat-num">4</div><div class="pstat-label">Level Risiko</div></div>
+                <div class="pstat"><div class="pstat-num">100%</div><div class="pstat-label">Berbasis Logika</div></div>
+            </div>
+        </aside>
+
+
+    <main class="panel-right">
+        
+        <section id="form-section">
+            <div class="sec-tag">Input Data Pasien</div>
+            <div class="sec-head">Masukkan Data Pemeriksaan</div>
+            <div class="input-grid">
+
+        
+            <div class="input-card">
+                <div class="input-card-header">
+                    <div>
+                        <div class="input-card-label">Kadar Hemoglobin</div>
+                        <div class="input-card-sub">Normal ≥12 g/dL (perempuan) · ≥13 g/dL (laki-laki)</div>
+                    </div>
+                <div>
+                    <div class="input-badge" id="hb-val">8.0</div>
+                    <div class="input-badge-unit">g/dL</div>
+                </div>
+            </div>
+            <input type="range" id="hb" min="0" max="15" step="0.5" value="8"
+            oninput="document.getElementById('hb-val').textContent=parseFloat(this.value).toFixed(1)">
+            <div class="range-minmax"><span>0 — Kritis</span><span>7.5</span><span>15 — Normal</span></div>
+            </div>
+
+        <!-- Durasi -->
+        <div class="input-card">
+          <div class="input-card-header">
+            <div>
+              <div class="input-card-label">Durasi Keluhan</div>
+              <div class="input-card-sub">Sudah berapa minggu gejala dirasakan?</div>
+            </div>
+            <div>
+              <div class="input-badge" id="durasi-val">3</div>
+              <div class="input-badge-unit">minggu</div>
+            </div>
+          </div>
+          <input type="range" id="durasi" min="1" max="6" step="1" value="3"
+            oninput="document.getElementById('durasi-val').textContent=this.value">
+          <div class="range-minmax"><span>1 — Baru</span><span>3–4</span><span>6 — Lama</span></div>
+        </div>
+
+        <!-- Gejala -->
+        <div class="input-card">
+          <div class="input-card-header">
+            <div>
+              <div class="input-card-label">Gejala yang Dirasakan</div>
+              <div class="input-card-sub">Centang semua gejala yang dialami</div>
+            </div>
+          </div>
+          <div class="gejala-grid" id="gejala-grid">
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Pucat / kuku pucat</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Lemas & mudah lelah</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Pusing / kepala ringan</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Sesak napas ringan</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Jantung berdebar</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Sulit konsentrasi</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Kuku rapuh / berbentuk sendok</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Lidah nyeri / licin</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Tangan & kaki dingin</div>
+            <div class="gejala-item" onclick="toggleGejala(this)"><div class="gejala-check">✓</div>Nyeri dada saat aktivitas</div>
+          </div>
+          <div class="gejala-count-row">
+            <span>Jumlah gejala terpilih (dikonversi ke skala 1–10)</span>
+            <span class="gejala-count-badge" id="gejala-count">0 / 10</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="submit-row">
+        <button class="btn-analyze" onclick="analisis()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Analisis Risiko Sekarang
+        </button>
+        <button class="btn-reset" onclick="resetForm()">Reset</button>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="result-wrap" id="result-wrap">
+      <div class="sec-tag">Hasil Analisis</div>
+      <div class="sec-head">Tingkat Risiko Anemia</div>
+      <div class="result-main">
+        <div class="result-top" id="result-top">
+          <div>
+            <div class="result-label-sm">Tingkat Risiko</div>
+            <div class="result-kat" id="res-kat">—</div>
+          </div>
+          <div>
+            <div class="score-label">Nilai Defuzzifikasi</div>
+            <div class="score-num" id="res-score">—</div>
+            <div class="score-max">dari 100</div>
+          </div>
+        </div>
+        <div class="result-body" id="result-body">
+          <div class="prog-label"><span>0 — Rendah</span><span>Sangat Tinggi — 100</span></div>
+          <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+          <div class="summary-row">
+            <div class="sum-item"><div class="sum-val" id="s-hb">—</div><div class="sum-key">Hemoglobin (g/dL)</div></div>
+            <div class="sum-item"><div class="sum-val" id="s-gejala">—</div><div class="sum-key">Skor Gejala</div></div>
+            <div class="sum-item"><div class="sum-val" id="s-durasi">—</div><div class="sum-key">Durasi (minggu)</div></div>
+          </div>
+          <div class="rec-box" id="rec-box"></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn-reset" onclick="scrollToForm()">← Analisis Ulang</button>
+      </div>
+    </section>
+
+    <footer>
+      HemoScan · Sistem Deteksi Dini Risiko Anemia · Metode Fuzzy Mamdani<br>
+      <span>Bukan pengganti diagnosis tenaga medis profesional</span>
+    </footer>
+
+    </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
